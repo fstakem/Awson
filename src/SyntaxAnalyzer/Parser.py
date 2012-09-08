@@ -127,15 +127,17 @@ class Parser(object):
     
     def parseList(self):
         list_node = ListNode(self.start_position, self.end_position)
-        self.current_token = self.scanner.scan(self.source)
         
         while self.current_token != TokenType.RIGHT_BRACE or self.current_token != TokenType.NONE:
-            pass
+            self.current_token = self.scanner.scan(self.source)
+            value = self.parseValue()
+            list_node.data.append(value)
         
         if self.current_token == TokenType.RIGHT_BRACE:
-            pass
-        else:
-            pass
+            return list_node
+        
+        pos_str = self.positionToString(self.current_token)
+        raise ParseException('Error parsing list tokens at %s.' % (pos_str) )
     
     def positionToString(self, token):
         return 'line %s position %s' % (str(token.start_position), str(token.end_position))
