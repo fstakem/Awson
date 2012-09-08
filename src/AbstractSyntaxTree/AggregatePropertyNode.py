@@ -12,9 +12,9 @@ import logging
 
 # Classes
 import Utilities
-from AbstractSyntaxTree import AbstractSyntaxTree
+from PropertyNode import PropertyNode
 
-class AggregatePropertyNode(AbstractSyntaxTree):
+class AggregatePropertyNode(PropertyNode):
     """This class represents an aggregate property in a AST."""
        
     # Setup logging
@@ -31,5 +31,5 @@ class AggregatePropertyNode(AbstractSyntaxTree):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, name='Aggregate Generic Property', start_position, end_position):
+        super(AggregatePropertyNode, self).__init__(start_position, end_position)

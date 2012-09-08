@@ -31,5 +31,5 @@ class IntegerNode(PropertyData):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, data, start_position, end_position):
+        super(IntegerNode, self).__init__(data, start_position, end_position)

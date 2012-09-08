@@ -12,9 +12,9 @@ import logging
 
 # Classes
 import Utilities
-from AbstractSyntaxTree import AbstractSyntaxTree
+from PropertyData import PropertyData
 
-class BooleanNode(AbstractSyntaxTree):
+class BooleanNode(PropertyData):
     """This class represents an boolean in a AST."""
        
     # Setup logging
@@ -31,5 +31,5 @@ class BooleanNode(AbstractSyntaxTree):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, data, start_position, end_position):
+        super(BooleanNode, self).__init__(data, start_position, end_position)

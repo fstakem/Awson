@@ -23,6 +23,7 @@ from AbstractSyntaxTree import AggregatePropertyNode
 from AbstractSyntaxTree import CodeNode
 from AbstractSyntaxTree import FloatNode
 from AbstractSyntaxTree import IntegerNode
+from AbstractSyntaxTree import BooleanNode
 from AbstractSyntaxTree import ListNode
 from AbstractSyntaxTree import StringNode
 
@@ -74,63 +75,67 @@ class Parser(object):
                 self.current_token = self.scanner.scan(self.source)
                 
             return obj_node
-        else:
-            pos_str = self.positionToString(self.current_token)
-            raise ParseException('Error parsing object token at %s.' % (pos_str) )
+        
+        pos_str = self.positionToString(self.current_token)
+        raise ParseException('Error parsing object token at %s.' % (pos_str) )
     
     def parseProperty(self):
         prop_node = PropertyNode(self.current_token.data, self.start_position, self.end_position)
-        self.parsePropertyData(prop_node)
+        prop_node.data = self.parseValue()
         
         return prop_node
     
     def parseAggregateProperty(self):
         agg_prop_node = AggregatePropertyNode(self.current_token.data, self.start_position, self.end_position)
-        self.parsePropertyData(agg_prop_node)
+        agg_prop_node.data = self.parseValue()
         
         return agg_prop_node
     
-    def parsePropertyData(self, property_node):
+    def parseValue(self):
         self.current_token = self.scanner.scan(self.source)
         
         if self.current_token == TokenType.INT:
-            int_node = self.parseInteger()
+            return self.parseInteger()
         elif self.current_token == TokenType.FLOAT:
-            float_node = self.parseFloat()
-        elif self.current_token == TokenType.BOOL_TRUE:
-            bool_node = self.parseBooleanTrue()
-        elif self.current_token == TokenType.BOOL_FALSE:
-            bool_node = self.parseBooleanFalse()
+            return self.parseFloat()
+        elif self.current_token == TokenType.BOOL_TRUE or self.current_token == TokenType.BOOL_FALSE:
+            return self.parseBoolean()
         elif self.current_token == TokenType.STRING:
-            str_node = self.parseString()
+            return self.parseString()
         elif self.current_token == TokenType.CODE:
-            code_node = self.parseCode()
+            return self.parseCode()
         elif self.current_token == TokenType.LEFT_BRACE:
-            list_node = self.parseList()
-        else:
-            pos_str = self.positionToString(self.current_token)
-            raise ParseException('Error parsing property data token at %s.' % (pos_str) )
-    
+            return self.parseList()
+        
+        pos_str = self.positionToString(self.current_token)
+        raise ParseException('Error parsing value token at %s.' % (pos_str) )
+            
     def parseInteger(self):
-        int_node = IntegerNode()
+        return IntegerNode(self.current_token.data, self.start_position, self.end_position)
     
     def parseFloat(self):
-        pass
+        return FloatNode(self.current_token.data, self.start_position, self.end_position)
     
-    def parseBooleanTrue(self):
-        pass
-    
-    def parseBooleanFalse(self):
-        pass
+    def parseBoolean(self):
+        return BooleanNode(self.current_token.data, self.start_position, self.end_position)
     
     def parseString(self):
-        pass
+        return StringNode(self.current_token.data, self.start_position, self.end_position)
     
     def parseCode(self):
-        pass
+        return CodeNode(self.current_token.data, self.start_position, self.end_position)
     
     def parseList(self):
-        pass
+        list_node = ListNode(self.start_position, self.end_position)
+        self.current_token = self.scanner.scan(self.source)
+        
+        while self.current_token != TokenType.RIGHT_BRACE or self.current_token != TokenType.NONE:
+            pass
+        
+        if self.current_token == TokenType.RIGHT_BRACE:
+            pass
+        else:
+            pass
     
     def positionToString(self, token):
         return 'line %s position %s' % (str(token.start_position), str(token.end_position))
