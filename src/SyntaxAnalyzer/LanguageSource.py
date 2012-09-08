@@ -31,7 +31,8 @@ class LanguageSource(object):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self, symbols=''):
+    def __init__(self, name='Generic Source', symbols=''):
+        self.name = name
         self.symbols = symbols
         self.last_symbol = None
         self.current_position = -1

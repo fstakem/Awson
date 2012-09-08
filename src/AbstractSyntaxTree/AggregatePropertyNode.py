@@ -1,6 +1,6 @@
 #  ---------------------------------------------------------------------------
 #                                                                           
-#                  A G G R E G A T E  P A R A M E T E R  N O D E                              
+#                  A G G R E G A T E  P R O P E R T Y  N O D E                              
 #                                                                           
 #  ---------------------------------------------------------------------------
 
@@ -14,11 +14,11 @@ import logging
 import Utilities
 from AbstractSyntaxTree import AbstractSyntaxTree
 
-class AggregateParameterNode(AbstractSyntaxTree):
+class AggregatePropertyNode(AbstractSyntaxTree):
     """This class represents an aggregate parameter in a AST."""
        
     # Setup logging
-    logger = Utilities.getLogger('AggregateParameterNode')
+    logger = Utilities.getLogger('AggregatePropertyNode')
     
     # Class constants
     

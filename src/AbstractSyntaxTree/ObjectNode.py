@@ -31,5 +31,8 @@ class ObjectNode(AbstractSyntaxTree):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, name='Generic Object', start_position, end_position):
+        super(ObjectNode, self).__init__(start_position, end_position)
+        self.name = name
+        self.parameters = []
+        self.aggregate_parameters = []

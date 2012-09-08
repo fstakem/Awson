@@ -1,6 +1,6 @@
 #  ---------------------------------------------------------------------------
 #                                                                           
-#                         P A R A M E T E R  N O D E                              
+#                         P R O P E R T Y  N O D E                              
 #                                                                           
 #  ---------------------------------------------------------------------------
 
@@ -14,11 +14,11 @@ import logging
 import Utilities
 from AbstractSyntaxTree import AbstractSyntaxTree
 
-class ParameterNode(AbstractSyntaxTree):
+class PropertyNode(AbstractSyntaxTree):
     """This class represents a parameter in a AST."""
        
     # Setup logging
-    logger = Utilities.getLogger('ParameterNode')
+    logger = Utilities.getLogger('PropertyNode')
     
     # Class constants
     

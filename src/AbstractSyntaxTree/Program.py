@@ -31,5 +31,7 @@ class Program(AbstractSyntaxTree):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self, objNodes=[]):
+    def __init__(self, name='Generic Program', objNodes=[], start_position, end_position):
+        super(Program, self).__init__(start_position, end_position)
+        self.name = name
         self.objNodes= objNodes

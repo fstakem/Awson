@@ -54,7 +54,7 @@ class Scanner(object):
             elif Symbol.isEof(self.current_symbol):
                 return None
             else:
-                return self.scanToken(source)
+                return (self.scanToken(source), self.start_position, self.current_position)
        
     def scanComment(self, source):
         while not Symbol.isEol(self.current_symbol):

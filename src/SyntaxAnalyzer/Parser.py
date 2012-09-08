@@ -47,17 +47,34 @@ class Parser(object):
         self.scanner = scanner
         self.source = source
         self.current_token = None
+        self.start_position = None
+        self.end_position = None
     
     def parseProgram(self):
-        program = Program()
-        self.current_token = self.scanner.scan(self.source)
+        program = Program(self.source.name)
+        self.current_token, self.start_position, self.end_position = self.scanner.scan(self.source)
         
         while self.current_token != None:
             objNode = self.parseObject()
             program.objNodes.append(objNode)
 
     def parseObject(self):
-        pass
+        if self.current_token.type == TokenType.OBJECT:
+            objNode = ObjectNode(self.current_token.data, self.start_position, self.end_position)
+            self.current_token, self.start_position, self.end_position = self.scanner.scan(self.source)
+            while self.current_token != TokenType.OBJECT and self.current_token != TokenType.NONE:
+                if self.current_token == TokenType.PROPERTY:
+                    pass
+                elif self.current_token == TokenType.AGGREGATE_PROPERTY:
+                    pass
+                else:
+                    pass
+                
+                self.current_token, self.start_position, self.end_position = self.scanner.scan(self.source)
+                
+            return objNode
+        else:
+            pass
     
     def parseProperty(self):
         pass
