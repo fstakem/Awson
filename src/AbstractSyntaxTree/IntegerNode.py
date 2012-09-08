@@ -12,9 +12,9 @@ import logging
 
 # Classes
 import Utilities
-from AbstractSyntaxTree import AbstractSyntaxTree
+from PropertyData import PropertyData
 
-class IntegerNode(AbstractSyntaxTree):
+class IntegerNode(PropertyData):
     """This class represents a integer in a AST."""
        
     # Setup logging

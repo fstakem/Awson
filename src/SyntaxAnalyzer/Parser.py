@@ -18,8 +18,8 @@ from Scanner import Scanner
 from ParseException import ParseException
 from AbstractSyntaxTree import Program
 from AbstractSyntaxTree import ObjectNode
-from AbstractSyntaxTree import ParameterNode
-from AbstractSyntaxTree import AggregateParameterNode
+from AbstractSyntaxTree import PropertyNode
+from AbstractSyntaxTree import AggregatePropertyNode
 from AbstractSyntaxTree import CodeNode
 from AbstractSyntaxTree import FloatNode
 from AbstractSyntaxTree import IntegerNode
@@ -47,48 +47,80 @@ class Parser(object):
         self.scanner = scanner
         self.source = source
         self.current_token = None
-        self.start_position = None
-        self.end_position = None
     
     def parseProgram(self):
         program = Program(self.source.name)
-        self.current_token, self.start_position, self.end_position = self.scanner.scan(self.source)
+        self.current_token = self.scanner.scan(self.source)
         
         while self.current_token != None:
-            objNode = self.parseObject()
-            program.objNodes.append(objNode)
+            obj_node = self.parseObject()
+            program.objNodes.append(obj_node)
 
     def parseObject(self):
         if self.current_token.type == TokenType.OBJECT:
-            objNode = ObjectNode(self.current_token.data, self.start_position, self.end_position)
-            self.current_token, self.start_position, self.end_position = self.scanner.scan(self.source)
+            obj_node = ObjectNode(self.current_token.data, self.start_position, self.end_position)
+            self.current_token = self.scanner.scan(self.source)
             while self.current_token != TokenType.OBJECT and self.current_token != TokenType.NONE:
                 if self.current_token == TokenType.PROPERTY:
-                    pass
+                    prop_node = self.parseProperty()
+                    obj_node.properties.append(prop_node)
                 elif self.current_token == TokenType.AGGREGATE_PROPERTY:
-                    pass
+                    agg_prop_node = self.parseAggregateProperty()
+                    obj_node.aggregate_properties.append(agg_prop_node)
                 else:
-                    pass
+                    pos_str = self.positionToString(self.current_token)
+                    raise ParseException('Error parsing object token at %s.' % (pos_str) )
                 
-                self.current_token, self.start_position, self.end_position = self.scanner.scan(self.source)
+                self.current_token = self.scanner.scan(self.source)
                 
-            return objNode
+            return obj_node
         else:
-            pass
+            pos_str = self.positionToString(self.current_token)
+            raise ParseException('Error parsing object token at %s.' % (pos_str) )
     
     def parseProperty(self):
-        pass
+        prop_node = PropertyNode(self.current_token.data, self.start_position, self.end_position)
+        self.parsePropertyData(prop_node)
+        
+        return prop_node
     
     def parseAggregateProperty(self):
-        pass
+        agg_prop_node = AggregatePropertyNode(self.current_token.data, self.start_position, self.end_position)
+        self.parsePropertyData(agg_prop_node)
+        
+        return agg_prop_node
+    
+    def parsePropertyData(self, property_node):
+        self.current_token = self.scanner.scan(self.source)
+        
+        if self.current_token == TokenType.INT:
+            int_node = self.parseInteger()
+        elif self.current_token == TokenType.FLOAT:
+            float_node = self.parseFloat()
+        elif self.current_token == TokenType.BOOL_TRUE:
+            bool_node = self.parseBooleanTrue()
+        elif self.current_token == TokenType.BOOL_FALSE:
+            bool_node = self.parseBooleanFalse()
+        elif self.current_token == TokenType.STRING:
+            str_node = self.parseString()
+        elif self.current_token == TokenType.CODE:
+            code_node = self.parseCode()
+        elif self.current_token == TokenType.LEFT_BRACE:
+            list_node = self.parseList()
+        else:
+            pos_str = self.positionToString(self.current_token)
+            raise ParseException('Error parsing property data token at %s.' % (pos_str) )
     
     def parseInteger(self):
-        pass
+        int_node = IntegerNode()
     
     def parseFloat(self):
         pass
     
-    def parseBoolean(self):
+    def parseBooleanTrue(self):
+        pass
+    
+    def parseBooleanFalse(self):
         pass
     
     def parseString(self):
@@ -99,6 +131,9 @@ class Parser(object):
     
     def parseList(self):
         pass
+    
+    def positionToString(self, token):
+        return 'line %s position %s' % (str(token.start_position), str(token.end_position))
     
     
     

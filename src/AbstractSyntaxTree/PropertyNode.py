@@ -15,7 +15,7 @@ import Utilities
 from AbstractSyntaxTree import AbstractSyntaxTree
 
 class PropertyNode(AbstractSyntaxTree):
-    """This class represents a parameter in a AST."""
+    """This class represents a property in a AST."""
        
     # Setup logging
     logger = Utilities.getLogger('PropertyNode')
@@ -31,5 +31,7 @@ class PropertyNode(AbstractSyntaxTree):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, name='Generic Property', start_position, end_position):
+        super(PropertyNode, self).__init__(start_position, end_position)
+        self.name = name
+        self.data = None

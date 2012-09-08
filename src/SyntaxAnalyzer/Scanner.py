@@ -54,7 +54,7 @@ class Scanner(object):
             elif Symbol.isEof(self.current_symbol):
                 return None
             else:
-                return (self.scanToken(source), self.start_position, self.current_position)
+                return self.scanToken(source)
        
     def scanComment(self, source):
         while not Symbol.isEol(self.current_symbol):
@@ -132,7 +132,7 @@ class Scanner(object):
             self.acceptSymbol(source)
             
         if Symbol.isSeparator(self.current_symbol):
-            return Token(TokenType.OBJECT, self.symbol_buffer, self.start_position)
+            return Token(TokenType.OBJECT, self.symbol_buffer, self.start_position, self.current_position)
         
         pos_str = self.positionToString(self.current_position)
         raise ScanException('Error scanning object at %s.' % (pos_str) )
@@ -142,7 +142,7 @@ class Scanner(object):
             self.acceptSymbol(source)
             
         if Symbol.isColon(self.current_symbol):
-            return Token(TokenType.PROPERTY, self.symbol_buffer, self.start_position)
+            return Token(TokenType.PROPERTY, self.symbol_buffer, self.start_position, self.current_position)
         
         pos_str = self.positionToString(self.current_position)
         raise ScanException('Error scanning property at %s.' % (pos_str) )
@@ -153,20 +153,20 @@ class Scanner(object):
             self.acceptSymbol(source)
             
         if Symbol.isColon(self.current_symbol):
-            return Token(TokenType.AGGREGATE_PROPERTY, self.symbol_buffer, self.start_position)
+            return Token(TokenType.AGGREGATE_PROPERTY, self.symbol_buffer, self.start_position, self.current_position)
         
         pos_str = self.positionToString(self.current_position)
         raise ScanException('Error scanning aggregate property at %s.' % (pos_str) )
           
     def scanInt(self, source):
-        return Token(TokenType.INT, self.symbol_buffer, self.start_position)
+        return Token(TokenType.INT, self.symbol_buffer, self.start_position, self.current_position)
     
     def scanFloat(self, source):
         while Symbol.isDigit(self.current_symbol):
             self.acceptSymbol(source)
             
         if Symbol.isSeparator(self.current_symbol):
-            return Token(TokenType.FLOAT, self.symbol_buffer, self.start_position)
+            return Token(TokenType.FLOAT, self.symbol_buffer, self.start_position, self.current_position)
         elif Symbol.isExponent(self.current_symbol):
             self.acceptSymbol(source)
             if Symbol.isDash(self.current_symbol):
@@ -176,16 +176,16 @@ class Scanner(object):
                     self.acceptSymbol(source)
                     
                 if Symbol.isSeparator(self.current_symbol):
-                    return Token(TokenType.FLOAT, self.symbol_buffer, self.start_position)
+                    return Token(TokenType.FLOAT, self.symbol_buffer, self.start_position, self.current_position)
                 
         pos_str = self.positionToString(self.current_position)
         raise ScanException('Error scanning float at %s.' % (pos_str) )
     
     def scanBool(self, source):
         if Symbol.isBooleanTrue(self.symbol_buffer):
-            return Token(TokenType.BOOL_TRUE, self.symbol_buffer, self.start_position)
+            return Token(TokenType.BOOL_TRUE, self.symbol_buffer, self.start_position, self.current_position)
         elif Symbol.isBooleanFalse(self.symbol_buffer):
-            return Token(TokenType.BOOL_FALSE, self.symbol_buffer, self.start_position)
+            return Token(TokenType.BOOL_FALSE, self.symbol_buffer, self.start_position, self.current_position)
         
         pos_str = self.positionToString(self.current_position)
         raise ScanException('Error scanning boolean at %s.' % (pos_str) )
@@ -199,15 +199,15 @@ class Scanner(object):
             
         self.acceptSymbol(source)
         
-        return Token(TokenType.STRING, self.symbol_buffer, self.start_position)
+        return Token(TokenType.STRING, self.symbol_buffer, self.start_position, self.current_position)
     
     def scanLeftBrace(self, source):
         self.acceptSymbol(source)
-        return Token(TokenType.LEFT_BRACE, self.symbol_buffer, self.start_position)
+        return Token(TokenType.LEFT_BRACE, self.symbol_buffer, self.start_position, self.current_position)
     
     def scanRightBrace(self, source):
         self.acceptSymbol(source)
-        return Token(TokenType.RIGHT_BRACE, self.symbol_buffer, self.start_position)
+        return Token(TokenType.RIGHT_BRACE, self.symbol_buffer, self.start_position, self.current_position)
                
     def scanCode(self, source):
         self.acceptSymbol(source)
@@ -218,7 +218,7 @@ class Scanner(object):
             
         self.acceptSymbol(source)
         
-        return Token(TokenType.CODE, self.symbol_buffer, self.start_position)
+        return Token(TokenType.CODE, self.symbol_buffer, self.start_position, self.current_position)
     
     def acceptSymbol(self, source):
         self.symbol_buffer += self.current_symbol

@@ -1,6 +1,6 @@
 #  ---------------------------------------------------------------------------
 #                                                                           
-#                  A G G R E G A T E  P R O P E R T Y  N O D E                              
+#                            P R O P E R T Y  D A T A                              
 #                                                                           
 #  ---------------------------------------------------------------------------
 
@@ -14,11 +14,11 @@ import logging
 import Utilities
 from AbstractSyntaxTree import AbstractSyntaxTree
 
-class AggregatePropertyNode(AbstractSyntaxTree):
-    """This class represents an aggregate property in a AST."""
+class PropertyData(AbstractSyntaxTree):
+    """This class represents a property data type in a AST."""
        
     # Setup logging
-    logger = Utilities.getLogger('AggregatePropertyNode')
+    logger = Utilities.getLogger('PropertyData')
     
     # Class constants
     
@@ -31,5 +31,6 @@ class AggregatePropertyNode(AbstractSyntaxTree):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self):
-        pass
+    def __init__(self, data=None, start_position, end_position):
+        super(PropertyData, self).__init__(start_position, end_position)
+        self.data = data

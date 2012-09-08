@@ -31,10 +31,11 @@ class Token(object):
     # -----------------------------------------------------------------------
     #       Instance Functions
     # -----------------------------------------------------------------------
-    def __init__(self, type=TokenType.NONE, data=None, position=None):
+    def __init__(self, type=TokenType.NONE, data=None, start_position=-1, end_position=-1):
         self.type = type
         self.data = data
-        self.position = position
+        self.start_position = start_position
+        self.end_position = end_position
         
     def __str__(self):
         return 'Type: %s Data: %s Line: %s' % (TokenType.prettyPrint(self.type), self.data, str(self.position[0]))
